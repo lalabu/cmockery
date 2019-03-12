@@ -1224,7 +1224,17 @@ void _assert_true(const LargestIntegralType result,
                   const char * const expression,
                   const char * const file, const int line) {
     if (!result) {
-        print_error("%s\n", expression);
+        print_error("expected '%s' to be true\n", expression);
+        _fail(file, line);
+    }
+}
+
+
+void _assert_false(const LargestIntegralType result,
+                  const char * const expression,
+                  const char * const file, const int line) {
+    if (!result) {
+        print_error("expected '%s' to be false\n", expression);
         _fail(file, line);
     }
 }
@@ -1532,7 +1542,7 @@ static LONG WINAPI exception_filter(EXCEPTION_POINTERS *exception_pointers) {
 void vprint_message(const char* const format, va_list args) {
     char buffer[1024];
     vsnprintf(buffer, sizeof(buffer), format, args);
-    printf(buffer);
+    puts(buffer);
 #ifdef _WIN32
     OutputDebugString(buffer);
 #endif // _WIN32
@@ -1542,7 +1552,7 @@ void vprint_message(const char* const format, va_list args) {
 void vprint_error(const char* const format, va_list args) {
     char buffer[1024];
     vsnprintf(buffer, sizeof(buffer), format, args);
-    fprintf(stderr, buffer);
+    fputs(buffer, stderr);
 #ifdef _WIN32
     OutputDebugString(buffer);
 #endif // _WIN32
